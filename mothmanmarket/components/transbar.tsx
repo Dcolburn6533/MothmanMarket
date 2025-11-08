@@ -23,6 +23,7 @@ type Transaction = {
 
 export default function TransactionTicker() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [animationKey, setAnimationKey] = useState(0);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -66,22 +67,32 @@ export default function TransactionTicker() {
         }));
 
         setTransactions(formatted);
+        setAnimationKey(prev => prev + 1); // Force animation restart
       }
     };
 
     fetchTransactions();
 
-    // sub to new transactions
+    // Periodic refresh every 30 seconds
+    const refreshInterval = setInterval(() => {
+      console.log('Auto-refreshing transactions...');
+      fetchTransactions();
+    }, 300000);
+
+    // Subscribe to new transactions
     const channel = supabase
       .channel("realtime:transactions")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "transactions" },
-        () => fetchTransactions()
+        () => {
+          fetchTransactions();
+        }
       )
       .subscribe();
 
     return () => {
+      clearInterval(refreshInterval);
       supabase.removeChannel(channel);
     };
   }, []);
@@ -112,7 +123,7 @@ export default function TransactionTicker() {
           </span>
         </span>
         <span className="text-zinc-300">shares of</span>
-        <span className="mx-1.5 text-zinc-100 italic">"{t.bet_title}"</span>
+        <span className="mx-1.5 text-[#a89b03] italic">"{t.bet_title}"</span>
         <span className="text-zinc-300">@</span>
         <span className="ml-1.5 font-semibold text-emerald-400">
           ${price?.toFixed(2) || "0.00"}
@@ -129,19 +140,18 @@ export default function TransactionTicker() {
     );
   }
 
-const SECONDS_PER_TRANSACTION = 10;
-const animationDuration = sortedTransactions.length * SECONDS_PER_TRANSACTION;
-console.log('Animation duration:', animationDuration, 'seconds');
-console.log('Number of transactions:', sortedTransactions.length);
+  const SECONDS_PER_TRANSACTION = 10;
+  const animationDuration = sortedTransactions.length * SECONDS_PER_TRANSACTION;
 
   return (
     <div className="w-full bg-[#454343] border-b border-zinc-800 overflow-hidden relative">
       <div className={`ticker-wrapper py-3 ${tickerFont.className}`}>
         <div 
-        className="ticker-content"
-        style={{
-          animation: `scroll ${animationDuration}s linear infinite`
-        }}>
+          key={animationKey}
+          className="ticker-content"
+          style={{
+            animation: `scroll ${animationDuration}s linear infinite`
+          }}>
           {transactionElements}
           {transactionElements}
         </div>
