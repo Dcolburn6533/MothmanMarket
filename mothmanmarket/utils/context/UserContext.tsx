@@ -6,6 +6,8 @@ import { createClient } from '@supabase/supabase-js'
 interface UserContextType {
     userId: string | null;
     setUserId:  Dispatch<SetStateAction<string | null>>;
+    balance: number | null;
+    setBalance: Dispatch<SetStateAction<number | null>>;
 }
 
 export const supabase = createClient(
@@ -17,9 +19,11 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [userId, setUserId] = useState<string | null>(null);
+    const [balance, setBalance] = useState<number | null>(null);
+
     console.log(userId)
     return (
-        <UserContext.Provider value={{ userId, setUserId }}>
+        <UserContext.Provider value={{ userId, setUserId, balance, setBalance }}>
             { children }
         </UserContext.Provider>
     );
