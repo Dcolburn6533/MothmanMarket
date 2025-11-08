@@ -73,13 +73,13 @@ export default function TransactionTicker() {
 
     fetchTransactions();
 
-    // Periodic refresh every 30 seconds
+    // periodic refresh every 30 seconds
     const refreshInterval = setInterval(() => {
       console.log('Auto-refreshing transactions...');
       fetchTransactions();
     }, 300000);
 
-    // Subscribe to new transactions
+    // subscribe to new transactions
     const channel = supabase
       .channel("realtime:transactions")
       .on(
@@ -140,6 +140,7 @@ export default function TransactionTicker() {
     );
   }
 
+  // set amount of seconds for transaction animation
   const SECONDS_PER_TRANSACTION = 10;
   const animationDuration = sortedTransactions.length * SECONDS_PER_TRANSACTION;
 
