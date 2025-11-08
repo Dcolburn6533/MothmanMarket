@@ -6,6 +6,8 @@ import { createClient } from '@supabase/supabase-js'
 interface UserContextType {
     userId: string | null | undefined; // undefined while initializing
     setUserId: (id: string | null) => void;
+    balance: number | null;
+    setBalance: (balance: number | null) => void;
     initialized: boolean;
 }
 
@@ -17,15 +19,26 @@ export const supabase = createClient(
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [userId, setUserId] = useState<string | null>(null);
-    const [balance, setBalance] = useState<number | null>(null);
+        const [userId, setUserId] = useState<string | null>(null);
+        const [balance, setBalance] = useState<number | null>(null);
+        const [initialized, setInitialized] = useState<boolean>(false);
 
-    console.log(userId)
-    return (
-        <UserContext.Provider value={{ userId, setUserId, balance, setBalance }}>
-            { children }
-        </UserContext.Provider>
-    );
+        useEffect(() => {
+            try {
+                const stored = localStorage.getItem('user_id');
+                if (stored) setUserId(stored);
+            } catch {
+                // ignore in non-browser environments
+            } finally {
+                setInitialized(true);
+            }
+        }, []);
+
+        return (
+                <UserContext.Provider value={{ userId, setUserId, balance, setBalance, initialized }}>
+                        { children }
+                </UserContext.Provider>
+        );
 };
 
 export const useUser = (): UserContextType => {
