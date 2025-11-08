@@ -4,9 +4,11 @@ import { createContext, useState, useContext, ReactNode, useEffect } from "react
 import { createClient } from '@supabase/supabase-js'
 
 interface UserContextType {
-    userId: string | null | undefined; // undefined while initializing
+    userId: string | null | undefined; 
     setUserId: (id: string | null) => void;
-    initialized: boolean;
+    balance: number | null;
+    setBalance: (balance: number | null) => void;
+    initialized?: boolean;
 }
 
 export const supabase = createClient(

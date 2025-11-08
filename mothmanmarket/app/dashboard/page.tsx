@@ -113,10 +113,10 @@ export default function MothmanDashboard() {
       {loading ? (
         <p className="text-center text-zinc-400">Loading market data...</p>
       ) : error ? (
-        <p className="text-center text-red-500">{error}</p>
+        <p className="text-center text-[#c75000]">{error}</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bets.map((bet, i) => {
+            {bets.map((bet, i) => {
             const betHistory = priceHistory.filter((h) => h.bet_id === bet.id);
 
             const chartData = betHistory.map((h) => ({
@@ -142,8 +142,17 @@ export default function MothmanDashboard() {
             return (
               <Card
                 key={bet.id ?? `bet-${i}`}
-                className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
-                style= {{ backgroundColor: '#454343'}}
+                className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl cursor-pointer"
+                style={{ backgroundColor: '#454343' }}
+                role="button"
+                tabIndex={0}
+                onClick={() => router.push(`/bet/${bet.id}`)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    router.push(`/bet/${bet.id}`);
+                  }
+                }}
               >
                 <CardHeader>
                   <h2 className="text-lg font-semibold text-zinc-100">
@@ -171,17 +180,28 @@ export default function MothmanDashboard() {
                           }}
                           formatter={(value, name) => [
                             Number(value).toFixed(3),
-                            name === "yes_price" ? "Yes" : "No",
+                            String(name).toLowerCase().includes("yes")
+                              ? "Yes"
+                              : String(name).toLowerCase().includes("no")
+                              ? "No"
+                              : String(name),
                           ]}
                           labelFormatter={(label) => `Time: ${label}`}
                         />
-                        <Legend />
+                        <Legend
+                          formatter={(value) =>
+                            String(value).toLowerCase().includes("yes")
+                              ? "Yes"
+                              : String(value).toLowerCase().includes("no")
+                              ? "No"
+                              : String(value)
+                          }
+                        />
                         <Line
                           type="monotone"
                           dataKey="yes_price"
                           stroke="#925cff"
                           name="Yes"
-
                           dot={false}
                         />
                         <Line

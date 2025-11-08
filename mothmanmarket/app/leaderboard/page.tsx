@@ -55,7 +55,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black p-8 text-zinc-50">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-red-500 tracking-wide">
+    <h1 className="text-4xl font-extrabold mb-8 text-center text-[#c75000] tracking-wide">
           Mothman Market Leaderboard 
       </h1>
       <p className="text-center text-zinc-400 mb-6">
@@ -65,11 +65,11 @@ export default function LeaderboardPage() {
       {loading ? (
         <p className="text-center text-zinc-400">Summoning balances from the void...</p>
       ) : error ? (
-        <p className="text-center text-red-500">{error}</p>
+        <p className="text-center text-[#c75000]">{error}</p>
       ) : (
-        <Card className="bg-zinc-900 border-red-800 shadow-lg rounded-2xl max-w-2xl mx-auto">
+        <Card className="bg-zinc-900 border-[#c75000] shadow-lg rounded-2xl max-w-2xl mx-auto">
           <CardHeader>
-            <h2 className="text-lg font-semibold text-red-400 text-center">
+            <h2 className="text-lg font-semibold text-[#c75000] text-center">
               Top Seers in the World
             </h2>
           </CardHeader>
@@ -95,11 +95,11 @@ export default function LeaderboardPage() {
                       key={p.username}
                       className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors"
                     >
-                      <td className="py-2 px-4 font-bold text-red-400">
+                      <td className="py-2 px-4 font-bold text-[#c75000]">
                         {rankIcon} {index + 1}
                       </td>
                       <td className="py-2 px-4">{p.username}</td>
-                      <td className="py-2 px-4 text-right text-green-400">
+                      <td className="py-2 px-4 text-right text-[#925cff]">
                         {p.balance.toFixed(2)}
                       </td>
                     </tr>
