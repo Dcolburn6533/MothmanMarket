@@ -186,7 +186,7 @@ const handleResolve = async (outcome: "yes" | "no") => {
     <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       {!bet ? (
         <div className="max-w-xl mx-auto">
-          <p className="text-center text-[#c75000]">{message ?? "Bet not found."}</p>
+          <p className="text-center text-red-400">{message ?? "Bet not found."}</p>
         </div>
       ) : (
         <div className="max-w-3xl mx-auto">
@@ -205,10 +205,10 @@ const handleResolve = async (outcome: "yes" | "no") => {
                     <div className="h-64 mb-4">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={chartData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#d1cfcf" />
-                          <XAxis dataKey="time" stroke="#d1cfcf" />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                          <XAxis dataKey="time" stroke="#a1a1aa" />
                           <YAxis
-                            stroke="#d1cfcf"
+                            stroke="#a1a1aa"
                             domain={[0, 1]}
                             tickFormatter={(v) => Number(v).toFixed(3)}
                           />
@@ -219,25 +219,21 @@ const handleResolve = async (outcome: "yes" | "no") => {
                             }}
                             formatter={(value, name) => [
                               Number(value).toFixed(3),
-                              String(name).toLowerCase().includes("yes")
-                                ? "Yes"
-                                : String(name).toLowerCase().includes("no")
-                                ? "No"
-                                : String(name),
+                              name === "yes_price" ? "Yes" : "No",
                             ]}
                             labelFormatter={(label) => `Time: ${label}`}
                           />
                           <Legend
                             formatter={(value) =>
-                              String(value).toLowerCase().includes("yes")
+                              value === "yes_price"
                                 ? "Yes"
-                                : String(value).toLowerCase().includes("no")
+                                : value === "no_price"
                                 ? "No"
-                                : String(value)
+                                : value
                             }
                           />
-                          <Line type="monotone" dataKey="yes_price" stroke="#925cff" name="Yes" dot={false} />
-                          <Line type="monotone" dataKey="no_price" stroke="#c75000" name="No" dot={false} />
+                          <Line type="monotone" dataKey="yes_price" stroke="#a10cbeff" name="Yes" dot={false} />
+                          <Line type="monotone" dataKey="no_price" stroke="#0ae9cbff" name="No" dot={false} />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
@@ -247,13 +243,13 @@ const handleResolve = async (outcome: "yes" | "no") => {
                   <div className="mt-2 flex gap-4 items-center">
                     <div className="px-3 py-2 bg-zinc-900 rounded">
                       <div className="text-xs text-zinc-400">Yes</div>
-                      <div className="text-lg font-semibold text-[#925cff]">
+                      <div className="text-lg font-semibold text-green-400">
                         {Number(bet.yes_price).toFixed(3)}
                       </div>
                     </div>
                     <div className="px-3 py-2 bg-zinc-900 rounded">
                       <div className="text-xs text-zinc-400">No</div>
-                      <div className="text-lg font-semibold text-[#c75000]">
+                      <div className="text-lg font-semibold text-red-400">
                         {Number(bet.no_price).toFixed(3)}
                       </div>
                     </div>
@@ -268,23 +264,23 @@ const handleResolve = async (outcome: "yes" | "no") => {
                     <div className="mt-2 flex gap-2">
                       <button
                         onClick={() => setAction("buy")}
-                          disabled={!bet.active}
-                          className={`px-3 py-1 rounded ${
-                            action === "buy"
-                              ? "bg-[#925cff] text-black"
-                              : "bg-zinc-800"
-                          } ${!bet.active ? "opacity-50 cursor-not-allowed" : ""}`}
+                        disabled={!bet.active}
+                        className={`px-3 py-1 rounded ${
+                          action === "buy"
+                            ? "bg-green-600 text-black"
+                            : "bg-zinc-800"
+                        } ${!bet.active ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Buy
                       </button>
                       <button
                         onClick={() => setAction("sell")}
-                          disabled={!bet.active}
-                          className={`px-3 py-1 rounded ${
-                            action === "sell"
-                              ? "bg-[#c75000] text-black"
-                              : "bg-zinc-800"
-                          } ${!bet.active ? "opacity-50 cursor-not-allowed" : ""}`}
+                        disabled={!bet.active}
+                        className={`px-3 py-1 rounded ${
+                          action === "sell"
+                            ? "bg-red-600 text-black"
+                            : "bg-zinc-800"
+                        } ${!bet.active ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Sell
                       </button>
@@ -297,22 +293,22 @@ const handleResolve = async (outcome: "yes" | "no") => {
                     <div className="mt-2 flex gap-2">
                       <button
                         onClick={() => setSide("yes")}
-                          className={`px-3 py-1 rounded ${
-                            side === "yes"
-                              ? "bg-[#925cff] text-black"
-                              : "bg-zinc-800"
-                          }`}
+                        className={`px-3 py-1 rounded ${
+                          side === "yes"
+                            ? "bg-green-700 text-black"
+                            : "bg-zinc-800"
+                        }`}
                         disabled={!bet.active}
                       >
                         Yes
                       </button>
                       <button
                         onClick={() => setSide("no")}
-                          className={`px-3 py-1 rounded ${
-                            side === "no"
-                              ? "bg-[#c75000] text-black"
-                              : "bg-zinc-800"
-                          }`}
+                        className={`px-3 py-1 rounded ${
+                          side === "no"
+                            ? "bg-red-700 text-black"
+                            : "bg-zinc-800"
+                        }`}
                         disabled={!bet.active}
                       >
                         No
@@ -355,13 +351,13 @@ const handleResolve = async (outcome: "yes" | "no") => {
                     <div className="mt-4 flex gap-2">
                       <button
                         onClick={() => handleResolve("yes")}
-                        className="flex-1 px-4 py-2 bg-[#925cff] text-black rounded font-semibold"
+                        className="flex-1 px-4 py-2 bg-green-600 text-black rounded font-semibold"
                       >
                         Resolve Yes
                       </button>
                       <button
                         onClick={() => handleResolve("no")}
-                        className="flex-1 px-4 py-2 bg-[#c75000] text-black rounded font-semibold"
+                        className="flex-1 px-4 py-2 bg-red-600 text-black rounded font-semibold"
                       >
                         Resolve No
                       </button>

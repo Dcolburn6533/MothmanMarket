@@ -53,7 +53,7 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-3 max-w-sm mx-auto mt-24 bg-black/50 p-6 rounded-2xl border border-red-900 text-white"
     >
-      <h1 className="text-2xl font-bold text-center text-[#c75000] mb-2">
+      <h1 className="text-2xl font-bold text-center text-red-500 mb-2">
         {mode === 'login' ? 'Speak with the Mothman' : 'Join the Cult of Mothman'}
       </h1>
 
@@ -62,7 +62,7 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
-        className="p-2 bg-zinc-900 border border-zinc-700 rounded focus:outline-none focus:border-[#c75000]"
+        className="p-2 bg-zinc-900 border border-zinc-700 rounded focus:outline-none focus:border-red-500"
       />
 
       <input
@@ -70,14 +70,14 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Secret phrase"
-        className="p-2 bg-zinc-900 border border-zinc-700 rounded focus:outline-none focus:border-[#c75000]"
+        className="p-2 bg-zinc-900 border border-zinc-700 rounded focus:outline-none focus:border-red-500"
       />
 
-      {error && <p className="text-[#c75000] text-center text-sm">{error}</p>}
+      {error && <p className="text-red-400 text-center text-sm">{error}</p>}
 
       <button
         type="submit"
-        className="bg-[#c75000] hover:bg-[#b04500] py-2 rounded font-semibold transition"
+        className="bg-red-700 hover:bg-red-600 py-2 rounded font-semibold transition"
       >
         {mode === 'login' ? 'Sign In' : 'Sign Up'}
       </button>
@@ -86,12 +86,12 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         {mode === 'login' ? (
           <>
             Don’t have an account?{' '}
-            <a href="/signup" className="text-[#c75000] hover:underline">Join here</a>.
+            <a href="/signup" className="text-red-400 hover:underline">Join here</a>.
           </>
         ) : (
           <>
             Already a believer?{' '}
-            <a href="/login" className="text-[#c75000] hover:underline">Sign in</a>.
+            <a href="/login" className="text-red-400 hover:underline">Sign in</a>.
           </>
         )}
       </p>
