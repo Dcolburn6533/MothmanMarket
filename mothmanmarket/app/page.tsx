@@ -38,21 +38,7 @@ export default function Home() {
           </p>
         </div>
       </main>
-             <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <button
-            onClick={() => {
-              localStorage.removeItem('user_id')
-              router.push('/login')
-            }}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-red-700 text-white px-5 hover:bg-red-600 transition md:w-[158px]"
-          >
-            Logout
-          </button>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-red-800 px-5 transition-colors hover:bg-red-900/20 md:w-[158px]"
-            href="/market"
-          ></a>
-        </div>
+
     </div>
   )
 }

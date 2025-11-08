@@ -83,7 +83,6 @@ export default function MothmanDashboard() {
         () => fetchData()
       )
       .subscribe();
-            // test User ID from localStorage
       const userId = localStorage.getItem('user_id');
       console.log('User ID on cleanup from localStorage:', userId);
     const historyChannel = supabase
@@ -106,9 +105,6 @@ export default function MothmanDashboard() {
 
   return (
     <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
-      <h1 className="text-3xl font-bold mb-8 text-center text-zinc-100">
-        Mothman Market Dashboard
-      </h1>
 
       {loading ? (
         <p className="text-center text-zinc-400">Loading market data...</p>
@@ -157,7 +153,6 @@ export default function MothmanDashboard() {
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                        {/* Hide X-axis labels */}
                         <XAxis dataKey="time" stroke="#a1a1aa" tick={false} />
                         <YAxis
                           stroke="#a1a1aa"
