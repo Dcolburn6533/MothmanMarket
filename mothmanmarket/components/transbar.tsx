@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/utils/supabase/client";
 import { Doto } from "next/font/google";
 
-// Initialize the font
 const tickerFont = Doto({ 
   subsets: ["latin"],
   weight: "900"
@@ -27,7 +26,7 @@ export default function TransactionTicker() {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      // Fetch recent transactions with user and bet info
+      // get recent transactions with user and bet info
       const { data, error } = await supabase
         .from("transactions")
         .select(
@@ -72,7 +71,7 @@ export default function TransactionTicker() {
 
     fetchTransactions();
 
-    // Subscribe to new transactions
+    // sub to new transactions
     const channel = supabase
       .channel("realtime:transactions")
       .on(
@@ -87,7 +86,7 @@ export default function TransactionTicker() {
     };
   }, []);
 
-  // Sort transactions by most recent first (buy_time or sell_time)
+  // sort transactions by most recent (buy_time or sell_time)
   const sortedTransactions = [...transactions].sort((a, b) => {
     const aTime = a.sell_time || a.buy_time;
     const bTime = b.sell_time || b.buy_time;
@@ -95,7 +94,7 @@ export default function TransactionTicker() {
     return new Date(bTime).getTime() - new Date(aTime).getTime();
   });
 
-  // Create the transaction text elements
+  // create the transaction text elements
   const transactionElements = sortedTransactions.map((t) => {
     const isSell = t.sell_time !== null;
     const action = isSell ? "sold" : "bought";
@@ -118,7 +117,6 @@ export default function TransactionTicker() {
         <span className="ml-1.5 font-semibold text-emerald-400">
           ${price?.toFixed(2) || "0.00"}
         </span>
-        {/* <span className="mx-3 text-zinc-600">•</span> */}
       </span>
     );
   });
@@ -131,12 +129,20 @@ export default function TransactionTicker() {
     );
   }
 
+const SECONDS_PER_TRANSACTION = 10;
+const animationDuration = sortedTransactions.length * SECONDS_PER_TRANSACTION;
+console.log('Animation duration:', animationDuration, 'seconds');
+console.log('Number of transactions:', sortedTransactions.length);
+
   return (
     <div className="w-full bg-[#454343] border-b border-zinc-800 overflow-hidden relative">
       <div className={`ticker-wrapper py-3 ${tickerFont.className}`}>
-        <div className="ticker-content">
+        <div 
+        className="ticker-content"
+        style={{
+          animation: `scroll ${animationDuration}s linear infinite`
+        }}>
           {transactionElements}
-          {/* Duplicate for seamless loop */}
           {transactionElements}
         </div>
       </div>
@@ -150,7 +156,6 @@ export default function TransactionTicker() {
         
         .ticker-content {
           display: inline-flex;
-          animation: scroll 120s linear infinite;
         }
         
         @keyframes scroll {
@@ -161,10 +166,6 @@ export default function TransactionTicker() {
             transform: translateX(-50%);
           }
         }
-        
-        // .ticker-content:hover {
-        //   animation-play-state: paused;
-        // }
       `}</style>
     </div>
   );
