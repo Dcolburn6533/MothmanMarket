@@ -1,36 +1,36 @@
 import Image from "next/image";
+import { Rubik_Distressed } from "next/font/google";
+
+const rubikFont = Rubik_Distressed({
+  subsets: ["latin"],
+  weight: "400",
+});
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-site text-white">
-      <header className="w-full bg-[#101820]/80 backdrop-blur flex items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-2">
+    <div>
+      <header className="header">
+        <div className="logo-container">
           <Image
-            src="/mothsona_cropped.jpg"
-            alt="Mothman logo"
-            width={50}
-            height={50}
-            className="rounded-md"
+            src="/mothsona_headcut.png"
+            alt="mothman_logo"
+            width={67}
+            height={67}
+            className="logo"
           />
-          <span className="text-lg font-semibold tracking-tight">
-            Mothmanmarket
-          </span>
+          {/* <span className="site-title">Mothmanmarket</span> */}
+          <span className={`${rubikFont.className} site-title`}>Mothmanmarket</span>
         </div>
-
-        <nav className="flex items-center gap-3">
-          <button className="px-3 py-1 rounded-md hover:bg-white/10">
-            User
-          </button>
-          <button className="px-3 py-1 rounded-md hover:bg-white/10">
-            Wallet
-          </button>
-          <button className="px-3 py-1 rounded-md hover:bg-white/10">
-            Leaderboard
-          </button>
+        <nav className="nav">
+          <button className="nav-button">Wallet</button>
+          <button className="nav-button">Leaderboard</button>
+          <button className="nav-button">Login</button>
+          <button className="nav-button signup">Sign Up</button>
         </nav>
       </header>
-
-      <main className="p-6"></main>
+      <main className="main-content">
+        <p>hello gambling addicts</p>
+      </main>
     </div>
   );
 }
