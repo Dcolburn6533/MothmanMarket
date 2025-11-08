@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 
 interface UserContextType {
     userId: string | null;
-    setUserId
+    setUserId: string | null;
 }
 
 export const supabase = createClient(
