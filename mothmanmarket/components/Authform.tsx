@@ -3,12 +3,14 @@
 import { useState } from 'react'
 import { supabase } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import { useUser } from '@/utils/context/UserContext'
 
 export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const { userId, setUserId } = useUser()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,12 +37,16 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         .eq('username', trimmedUsername)
         .single()
 
-    console.log('Login data:', data, 'Error:', error)
+      console.log('Login data:', data, 'Error:', error)
       if (error || !data || data.password !== trimmedPassword) {
         return setError('Invalid username or password')
       }
 
       localStorage.setItem('user_id', data.user_id)
+      console.log(data.user_id)
+      //const user = useContext(data.id)
+      setUserId(data.user_id)
+      
       router.push('/')
     }
   }
