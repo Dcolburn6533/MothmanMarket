@@ -1,21 +1,32 @@
-'use client'
+"use client"
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useUser } from '@/utils/context/UserContext'
 
 export default function Home() {
   const router = useRouter()
+  const { userId, initialized } = useUser()
 
+  // wait for the UserProvider to initialize (reads localStorage) before redirecting
   useEffect(() => {
-    const userId = localStorage.getItem('user_id')
-    console.log('User ID from localStorage:', userId)
+    if (!initialized) return;
+    console.log('User ID from context:', userId)
     if (!userId) {
       router.push('/login')
     } else {
       router.push('/dashboard')
     }
-  }, [router])
+  }, [initialized, userId, router])
+
+  if (!initialized) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+        <p className="text-zinc-500">Initializing...</p>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">

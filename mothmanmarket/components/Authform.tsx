@@ -42,9 +42,7 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         return setError('Invalid username or password')
       }
 
-      localStorage.setItem('user_id', data.user_id)
-      console.log(data.user_id)
-      setUserId(data.user_id)
+  setUserId(data.user_id)
       
       router.push('/')
     }

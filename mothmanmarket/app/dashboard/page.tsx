@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/utils/supabase/client";
+import { useUser } from '@/utils/context/UserContext'
 import {
   LineChart,
   Line,
@@ -13,6 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 type Bet = {
   id: string;
@@ -33,8 +35,10 @@ type PricePoint = {
 export default function MothmanDashboard() {
   const [bets, setBets] = useState<Bet[]>([]);
   const [priceHistory, setPriceHistory] = useState<PricePoint[]>([]);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { userId } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,16 +79,16 @@ export default function MothmanDashboard() {
 
     fetchData();
 
-    const betsChannel = supabase
+  const betsChannel = supabase
       .channel("realtime:bets")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "bets" },
         () => fetchData()
-      )
-      .subscribe();
-      const userId = localStorage.getItem('user_id');
-      console.log('User ID on cleanup from localStorage:', userId);
+  )
+  .subscribe();
+
+  console.log('User ID from context:', userId);
     const historyChannel = supabase
       .channel("realtime:price_history")
       .on(
@@ -137,9 +141,10 @@ export default function MothmanDashboard() {
 
             return (
               <Card
-                key={bet.id ?? `bet-${i}`}
-                className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
-              >
+                  key={bet.id ?? `bet-${i}`}
+                  onClick={() => router.push(`/bet/${bet.id}`)}
+                  className="cursor-pointer transform hover:scale-[1.01] transition-transform bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
+                >
                 <CardHeader>
                   <h2 className="text-lg font-semibold text-zinc-100">
                     {bet.title}
