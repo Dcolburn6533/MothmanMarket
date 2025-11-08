@@ -26,7 +26,7 @@ export default async function WalletPage() {
     if(error) {
         console.error('Error fetching data', error.message)
     } else {
-        console.log('Fetched data: ', data, `, with type ${typeof(data)}`)
+        console.log('Fetched data: ', data[0], `, with type ${typeof(data[0])}`)
     }
 
     // return(

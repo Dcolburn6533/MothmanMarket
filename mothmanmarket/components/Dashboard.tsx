@@ -3,7 +3,16 @@
 import { useState } from 'react'
 import { useUser } from '@/utils/context/UserContext'
 
-export default function Dashboard({data}) {
+
+type User = {
+  user_id: string,
+  balance: number,
+  created_at: string,
+  password: string,
+  username: string
+}
+
+export default function Dashboard({data}: {data: User}) {
     
     const user = useUser()
 
@@ -28,9 +37,9 @@ export default function Dashboard({data}) {
 
     return (
         <div>
-            Found data for username: {data[0].username}
+            Found data for username: {data.username}
             <br />
-            Current balance: {data[0].balance}
+            Current balance: {data.balance}
         </div>
     )
 }
