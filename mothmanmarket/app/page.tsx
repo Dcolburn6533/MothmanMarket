@@ -9,8 +9,11 @@ export default function Home() {
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id')
+    console.log('User ID from localStorage:', userId)
     if (!userId) {
       router.push('/login')
+    } else {
+      router.push('/dashboard')
     }
   }, [router])
 
@@ -31,10 +34,11 @@ export default function Home() {
           </h1>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             You’ve been chosen to witness the Prophecies. 🦋  
-            If you can see this, you’re logged in.
+            Redirecting you to the dashboard...
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+      </main>
+             <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <button
             onClick={() => {
               localStorage.removeItem('user_id')
@@ -47,11 +51,9 @@ export default function Home() {
           <a
             className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-red-800 px-5 transition-colors hover:bg-red-900/20 md:w-[158px]"
             href="/market"
-          >
-            Enter Market
-          </a>
+          ></a>
         </div>
-      </main>
     </div>
   )
 }
+
