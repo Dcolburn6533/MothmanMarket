@@ -50,6 +50,14 @@ export default function Home() {
           >
             Enter Market
           </a>
+          <button
+            onClick={() => {
+              router.push('/wallet')
+            }}
+            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-red-800 px-5 transition-colors hover:bg-red-900/20 md:w-[158px]"
+          >
+            Wallet
+          </button>
         </div>
       </main>
     </div>
