@@ -1,13 +1,12 @@
 'use client'
 
-import { createContext, useState, useContext, ReactNode, Dispatch, SetStateAction } from "react";
+import { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import { createClient } from '@supabase/supabase-js'
 
 interface UserContextType {
-    userId: string | null;
-    setUserId:  Dispatch<SetStateAction<string | null>>;
-    balance: number | null;
-    setBalance: Dispatch<SetStateAction<number | null>>;
+    userId: string | null | undefined; // undefined while initializing
+    setUserId: (id: string | null) => void;
+    initialized: boolean;
 }
 
 export const supabase = createClient(
