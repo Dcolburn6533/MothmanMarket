@@ -22,6 +22,6 @@
     "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
-    "@supabase/supabase-js": "^3.10.1"
+    "@supabase/supabase-js": "latest"
   }
 }
