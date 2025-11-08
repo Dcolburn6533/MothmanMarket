@@ -42,7 +42,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="w-full sticky top-0 z-50 backdrop-blur-sm bg-zinc-900/95 text-zinc-50 border-b border-zinc-800 shadow-sm">
+    <header className="w-full sticky top-0 z-50 backdrop-blur-sm bg-[#454343]/95 text-zinc-50 border-b border-zinc-800 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
@@ -68,7 +68,7 @@ export default function Navbar() {
           <button onClick={() => router.push('/leaderboard')} className={navButton}>Leaderboard</button>
           <button
             onClick={handleLogout}
-            className="px-3 py-1 rounded-md bg-red-600 text-black font-semibold hover:bg-red-500 transition-colors duration-150"
+            className="px-3 py-1 rounded-md bg-[#c00d07] text-black font-semibold hover:bg-[#8c0703] transition-colors duration-150"
           >
             Logout
           </button>
@@ -96,14 +96,14 @@ export default function Navbar() {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <div className="sm:hidden bg-zinc-900/95 border-t border-zinc-800">
+        <div className="sm:hidden bg-[#454343]/95 border-t border-zinc-800">
           <div className="px-4 py-3 flex flex-col gap-2">
             <button onClick={() => { setMenuOpen(false); router.push('/dashboard') }} className={navButton}>Dashboard</button>
             <button onClick={() => { setMenuOpen(false); router.push('/wallet') }} className={navButton}>Wallet</button>
             <button onClick={() => { setMenuOpen(false); router.push('/leaderboard') }} className={navButton}>Leaderboard</button>
             <button
               onClick={() => { setMenuOpen(false); handleLogout(); }}
-              className="px-3 py-1 rounded-md bg-red-600 text-black font-semibold hover:bg-red-500 transition-colors duration-150"
+              className="px-3 py-1 rounded-md bg-[#c00d07] text-black font-semibold hover:bg-[#a00904] transition-colors duration-150"
             >
               Logout
             </button>
