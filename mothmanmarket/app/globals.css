@@ -24,3 +24,73 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer base {
+
+  .wallet-table {
+    @apply text-red-700 w-full bg-slate-900 border-collapse;
+  }
+
+  /* .wallet-table #container {
+    @apply bg-slate-900;
+  }
+
+  .wallet-table .bg-content1 {
+    @apply bg-slate-900 border border-slate-700 rounded-lg shadow-none;
+  }
+
+  .wallet-table .shadow-small {
+    @apply shadow-none;
+  } */
+
+  .wallet-table table {
+    @apply w-full bg-slate-900 text-red-700 border-collapse rounded-md;
+  }
+
+  .wallet-table * {
+    @apply opacity-100;
+  }
+
+  .wallet-table thead {
+    @apply bg-slate-800 text-red-400 border-b border-slate-700;
+  }
+
+  .wallet-table th,
+  .wallet-table td {
+    @apply px-3 py-2 border-b border-slate-700;
+  }
+
+  .wallet-table tbody tr:hover {
+    @apply bg-slate-800;
+  }
+}
+
+
+/* @layer base {
+
+  .wallet-table {
+    @apply bg-slate-900 border border-slate-700 text-red-300 rounded-md; 
+     @apply w-full bg-slate-900 text-red-300 border-collapse;
+  }
+
+  .wallet-table * {
+    @apply opacity-100;
+  }
+
+  .wallet-table table {
+    @apply w-full bg-slate-900 text-red-300 border-collapse;
+  }
+
+  .wallet-table thead {
+    @apply bg-slate-800 text-red-200 border-b border-skate-700;
+  }
+
+  .wallet-table th,
+  .wallet-table td {
+    @apply px-3 py-2 border-b border-slate-700;
+  }
+
+  .wallet-table tbody tr:hover {
+    @apply bg-slate-800;
+  }
+} */
