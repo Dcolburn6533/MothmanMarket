@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mothmanmarket",
-  description: "Manifested by mothman powers",
+  title: "Omens of Mothman",
+  description: "Beware the omens of the Mothman Market.",
 };
 
 export default function RootLayout({
