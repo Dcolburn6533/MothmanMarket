@@ -11,7 +11,7 @@ const rubik = Rubik_Glitch({ subsets: ["latin"], weight: "400" });
 
 export default function Navbar() {
   const router = useRouter();
-  const { setUserId } = useUser();
+  const { userId, setUserId, initialized } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navButton =
@@ -40,6 +40,9 @@ export default function Navbar() {
       console.error("Unexpected logout error:", err);
     }
   };
+
+  if (!initialized) return null;
+  if (!userId) return null;
 
   return (
     <header className="w-full sticky top-0 z-50 backdrop-blur-sm bg-[#454343]/95 text-zinc-50 border-b border-zinc-800 shadow-sm">
