@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useUser } from "@/utils/context/UserContext";
 
 const MOTHSONA_QUOTES = [
   "✋ absolute cinema 🤚",
@@ -14,6 +15,7 @@ const MOTHSONA_QUOTES = [
 ];
 
 export function MothsonaPlush() {
+  const { userId, initialized } = useUser(); 
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [hasUnreadQuote, setHasUnreadQuote] = useState(true);
@@ -33,6 +35,10 @@ export function MothsonaPlush() {
     setIsOpen(false);
     setHasUnreadQuote(true);
   };
+  
+  // dont render if not initialized or no user
+  if (!initialized) return null;
+  if (!userId) return null; 
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
