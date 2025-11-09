@@ -89,10 +89,10 @@ export default function MakeBetPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50 flex items-start justify-center">
+    <div className="min-h-screen bg-[#262525] p-8 text-zinc-50 flex items-start justify-center">
       <form
         onSubmit={handleCreate}
-        className="w-full max-w-2xl bg-zinc-900 p-6 rounded-2xl border border-zinc-800"
+        className="w-full max-w-2xl bg-[#454343] p-6 rounded-2xl border border-zinc-800 !shadow-[4px_4px_12px_#c00d0780]"
       >
         <h1 className="text-2xl font-bold mb-4">Create a new bet</h1>
 
@@ -102,7 +102,7 @@ export default function MakeBetPage() {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Short, clear question"
           maxLength={120}
-          className="w-full mt-2 p-2 bg-zinc-800 rounded border border-zinc-700"
+          className="w-full mt-2 p-2 bg-[#262525] rounded border border-zinc-700"
         />
         <div className="text-xs text-zinc-400 mt-1">{title.length}/120</div>
 
@@ -113,7 +113,7 @@ export default function MakeBetPage() {
           placeholder="Optional details or context"
           rows={4}
           maxLength={256}
-          className="w-full mt-2 p-2 bg-zinc-800 rounded border border-zinc-700"
+          className="w-full mt-2 p-2 bg-[#262525] rounded border border-zinc-700"
         />
 
         <label className="block text-sm text-zinc-400 mt-4">Resolver (select a user)</label>
@@ -125,7 +125,7 @@ export default function MakeBetPage() {
               setSelectedResolver(null);
             }}
             placeholder="Search username (min 2 chars)"
-            className="w-full mt-2 p-2 bg-zinc-800 rounded border border-zinc-700"
+            className="w-full mt-2 p-2 bg-[#262525] rounded border border-zinc-700"
           />
           {searching && (
             <div className="absolute right-2 top-3 text-sm text-zinc-400">Searching…</div>
@@ -175,14 +175,14 @@ export default function MakeBetPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-[#925cff] text-black rounded font-semibold disabled:opacity-50"
+            className="px-4 py-2 bg-[#c00d07] hover:bg-[#a00904] text-black rounded font-semibold disabled:opacity-50"
           >
             {loading ? "Creating…" : "Create Bet"}
           </button>
           <button
             type="button"
             onClick={() => router.push('/dashboard')}
-            className="px-4 py-2 bg-zinc-800 rounded"
+            className="px-4 py-2 bg-[#333131] hover:bg-[#262525] rounded"
           >
             Cancel
           </button>
