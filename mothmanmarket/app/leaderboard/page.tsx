@@ -59,7 +59,7 @@ export default function LeaderboardPage() {
           Mothman Market Leaderboard 
       </h1>
       <p className="text-center text-zinc-400 italic mb-6">
-        The cryptid watches… who among the seers will rise highest?
+        The cryptid watches…who among the seers will rise highest?
       </p>
 
       {loading ? (
