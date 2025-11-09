@@ -91,7 +91,7 @@ export default function BetPage() {
             )
           );
 
-          const merged = times.map((time) => {
+            const merged = times.map((time) => {
             const entry = historyArr.find(
               (h) =>
                 new Date(String(h.created_at)).toLocaleTimeString([], {
@@ -169,6 +169,20 @@ export default function BetPage() {
 
   const isResolver = !!(bet && userId && bet.resolver_id === userId);
 
+  let yDomain: [number, number] = [0, 1];
+  const numericPrices = chartData
+    .flatMap((d) => [d.yes_price ?? NaN, d.no_price ?? NaN])
+    .filter((p) => typeof p === "number" && !Number.isNaN(p));
+  if (numericPrices.length > 0) {
+    const minPrice = Math.min(...numericPrices);
+    const maxPrice = Math.max(...numericPrices);
+    const range = Math.max(1e-9, maxPrice - minPrice);
+    const margin = Math.max(range * 0.05, Math.abs(maxPrice) * 0.01, 0.000001);
+    const lower = Math.max(0, minPrice - margin);
+    const upper = maxPrice + margin;
+    yDomain = [lower, upper];
+  }
+
   return (
     <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       {!bet ? (
@@ -196,7 +210,7 @@ export default function BetPage() {
                           <XAxis dataKey="time" stroke="#a1a1aa" />
                           <YAxis
                             stroke="#a1a1aa"
-                            domain={[0, 1]}
+                            domain={yDomain}
                             tickFormatter={(v) => Number(v).toFixed(3)}
                           />
                           <Tooltip
