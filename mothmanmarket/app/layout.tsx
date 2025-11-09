@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
+import TransactionTicker from "@/components/transbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <Providers>
           <Navbar />
+          <TransactionTicker />
           {children}
         </Providers>
       </body>
