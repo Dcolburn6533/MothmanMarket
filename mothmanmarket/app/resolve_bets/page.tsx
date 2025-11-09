@@ -82,7 +82,7 @@ export default function ResolveBetsPage() {
   if (loading) return <p className="p-6 text-center">Loading...</p>;
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen bg-[#262525] p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Resolve Bets</h1>
 
@@ -93,7 +93,7 @@ export default function ResolveBetsPage() {
         ) : (
           <div className="space-y-4">
             {bets.map((b) => (
-              <Card key={b.bet_id} className="bg-zinc-900">
+              <Card key={b.bet_id} className="bg-[#454343]">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -118,18 +118,18 @@ export default function ResolveBetsPage() {
                     <button
                       onClick={() => handleResolve(b, 'yes')}
                       disabled={b.resolved}
-                      className={`px-3 py-2 rounded flex-1 font-semibold ${b.resolved ? 'opacity-50 cursor-not-allowed bg-zinc-800' : 'bg-[#925cff] text-black'}`}
+                      className={`px-3 py-2 rounded flex-1 font-semibold ${b.resolved ? 'opacity-50 cursor-not-allowed bg-[#925cff]' : 'bg-[#925cff] hover:bg-[#925cff]/80 text-black'}`}
                     >
                       Resolve Yes
                     </button>
                     <button
                       onClick={() => handleResolve(b, 'no')}
                       disabled={b.resolved}
-                      className={`px-3 py-2 rounded flex-1 font-semibold ${b.resolved ? 'opacity-50 cursor-not-allowed bg-zinc-800' : 'bg-[#c75000] text-black'}`}
+                      className={`px-3 py-2 rounded flex-1 font-semibold ${b.resolved ? 'opacity-50 cursor-not-allowed bg-[#c75000]' : 'bg-[#c75000] hover:bg-[#c75000]/80 text-black'}`}
                     >
                       Resolve No
                     </button>
-                    <button onClick={() => router.push(`/bet/${b.bet_id}`)} className="px-3 py-2 rounded bg-zinc-800">View</button>
+                    <button onClick={() => router.push(`/bet/${b.bet_id}`)} className="px-3 py-2 rounded bg-[#333131] hover:bg-[#262525]">View</button>
                   </div>
                 </CardContent>
               </Card>

@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
 import TransactionTicker from "@/components/transbar";
+import { MothsonaPlush } from "@/components/mothsona_plush";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Navbar />
           <TransactionTicker />
           {children}
+          <MothsonaPlush />
         </Providers>
       </body>
     </html>

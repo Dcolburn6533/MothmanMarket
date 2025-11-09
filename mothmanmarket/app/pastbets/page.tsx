@@ -33,7 +33,7 @@ type PricePoint = {
   created_at: string;
 };
 
-export default function MothmanDashboard() {
+export default function PastBetsPage() {
   const [bets, setBets] = useState<Bet[]>([]);
   const [priceHistory, setPriceHistory] = useState<PricePoint[]>([]);
   const router = useRouter();
@@ -119,7 +119,7 @@ export default function MothmanDashboard() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bets
-            .filter((b) => b.active)
+            .filter((b) => !b.active)
             .map((bet, i) => {
             const betHistory = priceHistory.filter((h) => h.bet_id === bet.id);
 
