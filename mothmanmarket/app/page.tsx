@@ -11,7 +11,7 @@ export default function Home() {
 
   // wait for the UserProvider to initialize (reads localStorage) before redirecting
   useEffect(() => {
-    if (!initialized) return;
+    if (!initialized) {console.error("context not initialized!"); return;}
     console.log('User ID from context:', userId)
     if (!userId) {
       router.push('/login')
