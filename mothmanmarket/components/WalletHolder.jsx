@@ -7,25 +7,61 @@ import { NextFastTable, Fields } from 'next-fast-table'
 
 export default function WalletHolder() {
 
-    const elStrino = '2025-11-08T03:56:13.026474+00:00'
-    console.log("Date is: ", new Date(elStrino).toLocaleString())
-
     const user = useUser()
     const [ data, setData ] = useState(null)
     const [ error, setErr ] = useState(null)
     const [ currentHoldings, setCurrentHoldings ] = useState(null)
     const [ isEmpty, setIsEmpty ] = useState(false)
+    const [ currentBetsInvolved, setCurrentBetsInvolved ] = useState(null)
 
     const field = Fields;
     const columns = [
-        field.string("transaction_id"),
+        field.string("transaction_id", {
+            header: "Title",
+            render: (row) => {
+                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                return targetBet.bet_title.length > 20 ? targetBet.bet_title.slice(0, 20) : targetBet.bet_title
+            }
+        }),
+        field.string("bet_id"),
+        field.boolean("is_yes"),
         field.boolean("active"),
         field.number("amount_held"),
+        field.number("current_price"),
         field.number("buy_price"),
         field.string("buy_time", {
             header: "Buy Time",
             render: (row) => {return new Date(row.cell).toLocaleString()}
         }),
+        field.number("cur_value", {
+            header: "Current Value",
+            render: (row) => {
+                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
+                const value = marketPrice * row.row.amount_held
+                return value.toFixed(2)
+            }
+        }),
+        field.number("cur_profit", {
+            header: "Current Profit",
+            render: (row) => {
+                //console.log("Transaction contents of this row are: ", row.row)
+                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                //console.log("The matching bet is: ", targetBet)
+                const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
+                const profit = (marketPrice - row.row.buy_price) * row.row.amount_held
+                return profit.toFixed(2)
+            }
+        }),
+        field.string("cur_profit_perc", {
+            header: "Profit Since Purchase (%)",
+            render: (row) => {
+                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
+                const profitPercent = ((marketPrice - row.row.buy_price) * row.row.amount_held) / (row.row.buy_price * row.row.amount_held)
+                return (String(profitPercent.toFixed(4) * 100) + "%")
+            }
+        })
     ];
 
     const fetchUserData = async () => {
@@ -81,6 +117,8 @@ export default function WalletHolder() {
                     console.log(`WARNING! User currently has no holdings!`)
                     setIsEmpty(true)
                 }
+
+                return(data)
                 // currently does NOT feed to React context
             }
         
@@ -90,23 +128,58 @@ export default function WalletHolder() {
         }
     }
 
+    /// MAKE THIS INTO A REQUESTER THAT GETS THE MATCHING BETS TO THE ONES WE OWN
+    const fetchCurrentBetsHoldings = async (holdings) => {
+        try {
+            //console.log("STARTING BETS REQUEST", holdings)
+            if(!holdings){return []}
+
+            const current_transactions = holdings.map(obj => {
+                //console.log(`object in mapping: `, obj.bet_id)
+                return obj.bet_id
+            })
+            
+            const {data, error } = await supabase   
+                .from('bets')
+                .select('*')
+                .in('bet_id', current_transactions )
+            if(error) {
+                setCurrentBetsInvolved(null)
+                console.error(`Error: `, error)
+
+            } else {
+                console.log(`User's involved bets: `, data)
+                setCurrentBetsInvolved(data)
+            }
+        
+        } catch (err) {
+            console.error(err);
+            setCurrentBetsInvolved(null);
+        }
+    }
+    
 
     useEffect(() => {
         if(!user.userId){
             //return
 
-            user.setUserId('b1e98c85-6232-4a9c-945d-5aee59061054')
+            //user.setUserId('b1e98c85-6232-4a9c-945d-5aee59061054') // alice
+            user.setUserId('0c274850-7077-4c26-a196-9a5d7ddda766') //Bread
         }
         
         // Fetch once when the page is initially loaded
-        fetchUserData();
-        fetchCurrentHoldings();
+        (async () => {
+            await fetchUserData();
+            const holdings = await fetchCurrentHoldings();
+            await fetchCurrentBetsHoldings(holdings); 
+        })();
 
         // Fetch data every 5 seconds
-        const intervalId = setInterval(() => {
-            fetchUserData();
-            fetchCurrentHoldings();
-        }, 5000)
+        const intervalId = setInterval(async () => {
+            await fetchUserData();
+            const holdings = await fetchCurrentHoldings();
+            await fetchCurrentBetsHoldings(holdings);
+        }, 15000)
 
         // Clean up
         return () => clearInterval(intervalId);
