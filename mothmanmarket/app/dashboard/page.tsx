@@ -138,7 +138,7 @@ export default function MothmanDashboard() {
             return (
               <Card
                 key={bet.id ?? `bet-${i}`}
-                className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
+                className="bg-zinc-900 border-zinc-800 rounded-2xl !shadow-[4px_4px_12px_#c00d0740]"
                 style= {{ backgroundColor: '#454343'}}
               >
                 <CardHeader>

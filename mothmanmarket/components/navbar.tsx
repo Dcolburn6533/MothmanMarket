@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { Rubik } from "next/font/google";
+import { Rubik_Glitch } from "next/font/google";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 import { useUser } from "@/utils/context/UserContext";
 
-const rubik = Rubik({ subsets: ["latin"], weight: ["400", "700"] });
+const rubik = Rubik_Glitch({ subsets: ["latin"], weight: "400" });
 
 export default function Navbar() {
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function Navbar() {
               height={48}
               className="rounded-md"
             />
-            <span className={`${rubik.className} text-lg font-semibold hidden sm:inline-block`}>Mothmanmarket</span>
+            <span className={`${rubik.className} text-3xl font-semibold hidden sm:inline-block`}>Omens of Mothman</span>
           </button>
         </div>
 
