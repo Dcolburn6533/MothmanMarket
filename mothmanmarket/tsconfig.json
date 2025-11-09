@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/wallet/page.jsx", "utils/context/UserContext.tsx"  ],
+, "app/wallet/page.jsx", "utils/context/UserContext.tsx", "components/wallet_holder.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -108,7 +108,7 @@ export default function MothmanDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
+    <div className="min-h-screen bg-[#262525] p-8 text-zinc-50">
 
       {loading ? (
         <p className="text-center text-zinc-400">Loading market data...</p>
@@ -142,8 +142,17 @@ export default function MothmanDashboard() {
             return (
               <Card
                   key={bet.id ?? `bet-${i}`}
+                  className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl cursor-pointer"
+                  style= {{ backgroundColor: '#454343'}}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => router.push(`/bet/${bet.id}`)}
-                  className="cursor-pointer transform hover:scale-[1.01] transition-transform bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      router.push(`/bet/${bet.id}`);
+                    }
+                  }}
                 >
                 <CardHeader>
                   <h2 className="text-lg font-semibold text-zinc-100">
@@ -157,10 +166,10 @@ export default function MothmanDashboard() {
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                        <XAxis dataKey="time" stroke="#a1a1aa" tick={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#d1cfcf" />
+                        <XAxis dataKey="time" stroke="#d1cfcf" tick={false} />
                         <YAxis
-                          stroke="#a1a1aa"
+                          stroke="#d1cfcf"
                           domain={yDomain}
                           tickFormatter={(value) => Number(value).toFixed(3)}
                         />
@@ -179,7 +188,7 @@ export default function MothmanDashboard() {
                         <Line
                           type="monotone"
                           dataKey="yes_price"
-                          stroke="#a10cbeff"
+                          stroke="#925cff"
                           name="Yes"
 
                           dot={false}
@@ -187,7 +196,7 @@ export default function MothmanDashboard() {
                         <Line
                           type="monotone"
                           dataKey="no_price"
-                          stroke="#0ae9cbff"
+                          stroke="#c75000"
                           name="No"
                           dot={false}
                         />
