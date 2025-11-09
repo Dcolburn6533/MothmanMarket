@@ -22,6 +22,7 @@ type Bet = {
   active: boolean;
   yes_price: number;
   no_price: number;
+  comments?: string | null;
 };
 
 type PricePoint = {
@@ -62,6 +63,7 @@ export default function MothmanDashboard() {
         active: b.resolved === false,
         yes_price: parseFloat(b.yes_price),
         no_price: parseFloat(b.no_price),
+        comments: b.comments ?? null,
       }));
 
       const history: PricePoint[] = (historyRaw ?? []).map((h) => ({
@@ -155,9 +157,16 @@ export default function MothmanDashboard() {
                   }}
                 >
                 <CardHeader>
-                  <h2 className="text-lg font-semibold text-zinc-100">
+                  <h2 className="text-lg font-semibold text-zinc-100 truncate">
                     {bet.title}
                   </h2>
+                  {bet.comments ? (
+                    <p className="text-sm text-zinc-400 italic mt-1">
+                      {bet.comments.length > 120
+                        ? `${bet.comments.slice(0, 120)}...`
+                        : bet.comments}
+                    </p>
+                  ) : null}
                   <p className="text-sm text-zinc-400">
                     {bet.active ? "Active" : "Resolved"}
                   </p>
