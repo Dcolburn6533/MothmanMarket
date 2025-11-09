@@ -101,8 +101,10 @@ export default function MakeBetPage() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Short, clear question"
+          maxLength={120}
           className="w-full mt-2 p-2 bg-zinc-800 rounded border border-zinc-700"
         />
+        <div className="text-xs text-zinc-400 mt-1">{title.length}/120</div>
 
         <label className="block text-sm text-zinc-400 mt-4">Comments / Details</label>
         <textarea
@@ -110,6 +112,7 @@ export default function MakeBetPage() {
           onChange={(e) => setComments(e.target.value)}
           placeholder="Optional details or context"
           rows={4}
+          maxLength={256}
           className="w-full mt-2 p-2 bg-zinc-800 rounded border border-zinc-700"
         />
 

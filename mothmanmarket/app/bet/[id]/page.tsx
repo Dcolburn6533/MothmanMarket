@@ -23,6 +23,7 @@ type Bet = {
   yes_price: number;
   no_price: number;
   resolved: boolean;
+  resolver_id?: string | null;
 };
 
 export default function BetPage() {
@@ -67,6 +68,7 @@ export default function BetPage() {
           yes_price: parseFloat(data.yes_price),
           no_price: parseFloat(data.no_price),
           resolved: data.resolved,
+          resolver_id: data.resolver_id ?? null,
         });
 
         // Fetch price history
@@ -160,27 +162,12 @@ export default function BetPage() {
     }
   };
 
-const handleResolve = async (outcome: "yes" | "no") => {
-  if (!bet) return;
-  if (!bet.active) return setMessage("Cannot resolve a resolved bet.");
-
-  setMessage("Resolving bet...");
-  try {
-    const { error } = await supabase.rpc("resolve_bet", {
-      p_bet_id: bet.bet_id,   
-      p_outcome: outcome, 
-    });
-    if (error) throw error;
-    setMessage(`Bet resolved: ${outcome.toUpperCase()}`);
-    setBet({ ...bet, active: false });
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : JSON.stringify(err);
-    setMessage(msg || "Failed to resolve bet.");
-  }
-};
+// Resolve functionality removed from this page; resolvers should use the dedicated resolve UI.
 
 
   if (loading) return <p className="p-6 text-center">Loading...</p>;
+
+  const isResolver = !!(bet && userId && bet.resolver_id === userId);
 
   return (
     <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
@@ -264,23 +251,23 @@ const handleResolve = async (outcome: "yes" | "no") => {
                     <div className="mt-2 flex gap-2">
                       <button
                         onClick={() => setAction("buy")}
-                        disabled={!bet.active}
+                        disabled={!bet.active || isResolver}
                         className={`px-3 py-1 rounded ${
                           action === "buy"
                             ? "bg-green-600 text-black"
                             : "bg-zinc-800"
-                        } ${!bet.active ? "opacity-50 cursor-not-allowed" : ""}`}
+                        } ${!bet.active || isResolver ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Buy
                       </button>
                       <button
                         onClick={() => setAction("sell")}
-                        disabled={!bet.active}
+                        disabled={!bet.active || isResolver}
                         className={`px-3 py-1 rounded ${
                           action === "sell"
                             ? "bg-red-600 text-black"
                             : "bg-zinc-800"
-                        } ${!bet.active ? "opacity-50 cursor-not-allowed" : ""}`}
+                        } ${!bet.active || isResolver ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Sell
                       </button>
@@ -298,7 +285,7 @@ const handleResolve = async (outcome: "yes" | "no") => {
                             ? "bg-green-700 text-black"
                             : "bg-zinc-800"
                         }`}
-                        disabled={!bet.active}
+                        disabled={!bet.active || isResolver}
                       >
                         Yes
                       </button>
@@ -309,7 +296,7 @@ const handleResolve = async (outcome: "yes" | "no") => {
                             ? "bg-red-700 text-black"
                             : "bg-zinc-800"
                         }`}
-                        disabled={!bet.active}
+                        disabled={!bet.active || isResolver}
                       >
                         No
                       </button>
@@ -325,7 +312,7 @@ const handleResolve = async (outcome: "yes" | "no") => {
                       value={quantity}
                       onChange={(e) => setQuantity(Number(e.target.value))}
                       className="w-full mt-2 p-2 bg-zinc-900 rounded"
-                      disabled={!bet.active}
+                      disabled={!bet.active || isResolver}
                     />
                   </div>
 
@@ -333,7 +320,7 @@ const handleResolve = async (outcome: "yes" | "no") => {
                   <div className="flex gap-2 mt-4">
                     <button
                       onClick={handleConfirm}
-                      disabled={!bet.active}
+                      disabled={!bet.active || isResolver}
                       className="flex-1 px-4 py-2 bg-blue-600 text-black rounded font-semibold hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Confirm
@@ -346,22 +333,9 @@ const handleResolve = async (outcome: "yes" | "no") => {
                     </button>
                   </div>
 
-                  {/* Resolve Controls */}
-                  {bet.active && (
-                    <div className="mt-4 flex gap-2">
-                      <button
-                        onClick={() => handleResolve("yes")}
-                        className="flex-1 px-4 py-2 bg-green-600 text-black rounded font-semibold"
-                      >
-                        Resolve Yes
-                      </button>
-                      <button
-                        onClick={() => handleResolve("no")}
-                        className="flex-1 px-4 py-2 bg-red-600 text-black rounded font-semibold"
-                      >
-                        Resolve No
-                      </button>
-                    </div>
+                  {/* If the current user is the resolver, prevent trading to avoid conflict of interest */}
+                  {isResolver && (
+                    <p className="mt-4 text-sm text-yellow-300">You are the resolver for this bet — trading is disabled to avoid a conflict of interest.</p>
                   )}
 
                   {message && (
