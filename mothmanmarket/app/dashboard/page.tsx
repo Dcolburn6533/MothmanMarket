@@ -126,20 +126,28 @@ export default function MothmanDashboard() {
                 hour: "2-digit",
                 minute: "2-digit",
               }),
-              yes_price: Number(h.yes_price).toFixed(3),
-              no_price: Number(h.no_price).toFixed(3),
+              yes_price: Number(h.yes_price),
+              no_price: Number(h.no_price),
             }));
 
             const allPrices = chartData.flatMap((d) => [
-              parseFloat(d.yes_price),
-              parseFloat(d.no_price),
+              Number(d.yes_price),
+              Number(d.no_price),
             ]);
-            const minPrice = Math.min(...allPrices);
-            const maxPrice = Math.max(...allPrices);
-            const yDomain = [
-              Math.max(0, minPrice - 0.05),
-              Math.min(1, maxPrice + 0.05),
-            ];
+            const numericPrices = allPrices.filter((p) => typeof p === 'number' && !Number.isNaN(p));
+            let yDomain: [number, number];
+            if (numericPrices.length === 0) {
+              // default domain when no data
+              yDomain = [0, 1];
+            } else {
+              const minPrice = Math.min(...numericPrices);
+              const maxPrice = Math.max(...numericPrices);
+              const range = Math.max(1e-9, maxPrice - minPrice);
+              const margin = Math.max(range * 0.05, Math.abs(maxPrice) * 0.01, 0.000001);
+              const lower = Math.max(0, minPrice - margin);
+              const upper = maxPrice + margin;
+              yDomain = [lower, upper];
+            }
 
             return (
               <Card
