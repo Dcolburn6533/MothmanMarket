@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react'
 import { useUser } from '@/utils/context/UserContext'
 import { supabase } from '@/utils/supabase/client'
 import { NextFastTable, Fields } from 'next-fast-table'
+import { useRouter } from 'next/navigation'
 
 export default function WalletHolder() {
 
@@ -13,6 +14,7 @@ export default function WalletHolder() {
     const [ currentHoldings, setCurrentHoldings ] = useState(null)
     const [ isEmpty, setIsEmpty ] = useState(false)
     const [ currentBetsInvolved, setCurrentBetsInvolved ] = useState([])
+    const router = useRouter()
 
 
     const getTargetBet = (row) => {
@@ -182,6 +184,7 @@ export default function WalletHolder() {
 
     useEffect(() => {
         if(!user.userId){
+            router.push("/login")
             return
             //user.setUserId(null)
             //user.setUserId('b1e98c85-6232-4a9c-945d-5aee59061054') // alice
@@ -268,7 +271,7 @@ export default function WalletHolder() {
         <div>
             {currentHoldings && currentHoldings.length > 0 ?
                 <div className='wallet-table'>
-                    <h1>Current Positions</h1>
+                    <h1 className="text-2xl font-bold mb-4">Current Positions</h1>
                     <NextFastTable
                         columns={columns}
                         onFetch={onFetch}
