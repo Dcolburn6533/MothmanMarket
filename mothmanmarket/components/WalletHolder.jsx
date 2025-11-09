@@ -12,22 +12,37 @@ export default function WalletHolder() {
     const [ error, setErr ] = useState(null)
     const [ currentHoldings, setCurrentHoldings ] = useState(null)
     const [ isEmpty, setIsEmpty ] = useState(false)
-    const [ currentBetsInvolved, setCurrentBetsInvolved ] = useState(null)
+    const [ currentBetsInvolved, setCurrentBetsInvolved ] = useState([])
+
+
+    const getTargetBet = (row) => {
+        if(!Array.isArray(currentBetsInvolved)) {return null}
+        return currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id) ?? null
+    }
 
     const field = Fields;
     const columns = [
         field.string("transaction_id", {
             header: "Title",
             render: (row) => {
-                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
-                return targetBet.bet_title.length > 20 ? targetBet.bet_title.slice(0, 20) : targetBet.bet_title
+                const targetBet = getTargetBet(row)
+                if(!targetBet?.bet_title) {return 'Unknown bet'}
+                return targetBet.bet_title.length > 20 ? targetBet.bet_title.slice(0, 50) : targetBet.bet_title
             }
         }),
-        field.string("bet_id"),
+        //field.string("bet_id"),
         field.boolean("is_yes"),
         field.boolean("active"),
         field.number("amount_held"),
-        field.number("current_price"),
+        field.number("current_price", {
+            header: "Current Price",
+            render: (row) => {
+                const targetBet = getTargetBet(row)
+                if(!targetBet?.bet_title) {return 0}
+                const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
+                return marketPrice.toFixed(2)
+            }
+        }),
         field.number("buy_price"),
         field.string("buy_time", {
             header: "Buy Time",
@@ -36,7 +51,8 @@ export default function WalletHolder() {
         field.number("cur_value", {
             header: "Current Value",
             render: (row) => {
-                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                const targetBet = getTargetBet(row)
+                if(!targetBet?.bet_title) {return 0}
                 const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
                 const value = marketPrice * row.row.amount_held
                 return value.toFixed(2)
@@ -46,7 +62,8 @@ export default function WalletHolder() {
             header: "Current Profit",
             render: (row) => {
                 //console.log("Transaction contents of this row are: ", row.row)
-                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                const targetBet = getTargetBet(row)
+                if(!targetBet?.bet_title) {return 0}
                 //console.log("The matching bet is: ", targetBet)
                 const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
                 const profit = (marketPrice - row.row.buy_price) * row.row.amount_held
@@ -56,10 +73,11 @@ export default function WalletHolder() {
         field.string("cur_profit_perc", {
             header: "Profit Since Purchase (%)",
             render: (row) => {
-                const targetBet = currentBetsInvolved.find((bet) => bet.bet_id === row.row.bet_id)
+                const targetBet = getTargetBet(row)
+                if(!targetBet?.bet_title) {return '0%'}
                 const marketPrice = targetBet.is_yes ? targetBet.yes_price : targetBet.no_price 
                 const profitPercent = ((marketPrice - row.row.buy_price) * row.row.amount_held) / (row.row.buy_price * row.row.amount_held)
-                return (String(profitPercent.toFixed(4) * 100) + "%")
+                return (profitPercent.toFixed(4) * 100)
             }
         })
     ];
@@ -73,7 +91,7 @@ export default function WalletHolder() {
                 .eq('user_id', user.userId )
 
             if(error) {
-                setErr(error)
+                console.error(error)
                 setData(null)
                 console.error(`Error: `, error)
             } else {
@@ -90,7 +108,7 @@ export default function WalletHolder() {
             }
         
         } catch (err) {
-            setErr(err);
+            console.error(err);
             setData(null);
         }
     }
@@ -104,7 +122,7 @@ export default function WalletHolder() {
                 .eq('user_id', user.userId )
                     // (b1e98c85-6232-4a9c-945d-5aee59061054,alice)
             if(error) {
-                setErr(error)
+                console.error(error)
                 setData(null)
                 console.error(`Error: `, error)
 
@@ -123,7 +141,7 @@ export default function WalletHolder() {
             }
         
         } catch (err) {
-            setErr(err);
+            console.error(err);
             setData(null);
         }
     }
@@ -132,7 +150,10 @@ export default function WalletHolder() {
     const fetchCurrentBetsHoldings = async (holdings) => {
         try {
             //console.log("STARTING BETS REQUEST", holdings)
-            if(!holdings){return []}
+            if(!holdings || holdings.length === 0 ){
+                setCurrentBetsInvolved([])
+                return []
+            }
 
             const current_transactions = holdings.map(obj => {
                 //console.log(`object in mapping: `, obj.bet_id)
@@ -144,27 +165,27 @@ export default function WalletHolder() {
                 .select('*')
                 .in('bet_id', current_transactions )
             if(error) {
-                setCurrentBetsInvolved(null)
+                setCurrentBetsInvolved([])
                 console.error(`Error: `, error)
 
             } else {
                 console.log(`User's involved bets: `, data)
-                setCurrentBetsInvolved(data)
+                setCurrentBetsInvolved(data ?? [])
             }
         
         } catch (err) {
             console.error(err);
-            setCurrentBetsInvolved(null);
+            setCurrentBetsInvolved([]);
         }
     }
     
 
     useEffect(() => {
         if(!user.userId){
-            //return
-
+            return
+            //user.setUserId(null)
             //user.setUserId('b1e98c85-6232-4a9c-945d-5aee59061054') // alice
-            user.setUserId('0c274850-7077-4c26-a196-9a5d7ddda766') //Bread
+            //user.setUserId('0c274850-7077-4c26-a196-9a5d7ddda766') //Bread
         }
         
         // Fetch once when the page is initially loaded
@@ -174,7 +195,7 @@ export default function WalletHolder() {
             await fetchCurrentBetsHoldings(holdings); 
         })();
 
-        // Fetch data every 5 seconds
+        // Fetch data every 15 seconds
         const intervalId = setInterval(async () => {
             await fetchUserData();
             const holdings = await fetchCurrentHoldings();
@@ -231,19 +252,6 @@ export default function WalletHolder() {
 
     }
 
-    const onCreate = async () => {
-        console.log("Create not implemented yet")
-    }
-
-    const onUpdate = async () => {
-        console.log("Update not implemented yet")
-    }
-
-    const onDelete = async () => {
-        console.log("Delete not implemented yet")
-    }
-
-
     if(error){
         return(
             <div>Error encountered: {error.message}</div>
@@ -258,20 +266,12 @@ export default function WalletHolder() {
 
     return(
         <div>
-            <h1>User data from Supabase:</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
-            
-            <br/><br/>
-
             {currentHoldings && currentHoldings.length > 0 ?
-                <div>
-                    <h1>This user currently is holding:</h1>
+                <div className='wallet-table'>
+                    <h1>Current Positions</h1>
                     <NextFastTable
                         columns={columns}
                         onFetch={onFetch}
-                        onDelete={onDelete}
-                        onCreate={onCreate}
-                        onUpdate={onUpdate}
                     />
                 </div>
             :
@@ -280,15 +280,4 @@ export default function WalletHolder() {
 
         </div>
     )
-
-
-    //<pre>{JSON.stringify(currentHoldings, null, 2)}</pre>
-    
-    // return (
-    //     <div>
-    //         Found data for username: {data.username}
-    //         <br />
-    //         Current balance: {data.balance}
-    //     </div>
-    // )
 }
