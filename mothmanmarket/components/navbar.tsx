@@ -63,6 +63,7 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-3">
+          <button onClick={() => router.push('/make_bet')} className={navButton}>Create Bet</button>
           <button onClick={() => router.push('/dashboard')} className={navButton}>Dashboard</button>
           <button onClick={() => router.push('/wallet')} className={navButton}>Wallet</button>
           <button onClick={() => router.push('/leaderboard')} className={navButton}>Leaderboard</button>
@@ -98,6 +99,7 @@ export default function Navbar() {
       {menuOpen && (
         <div className="sm:hidden bg-[#454343]/95 border-t border-zinc-800">
           <div className="px-4 py-3 flex flex-col gap-2">
+            <button onClick={() => { setMenuOpen(false); router.push('/make_bet') }} className={navButton}>Create Bet</button>
             <button onClick={() => { setMenuOpen(false); router.push('/dashboard') }} className={navButton}>Dashboard</button>
             <button onClick={() => { setMenuOpen(false); router.push('/wallet') }} className={navButton}>Wallet</button>
             <button onClick={() => { setMenuOpen(false); router.push('/leaderboard') }} className={navButton}>Leaderboard</button>

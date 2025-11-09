@@ -141,10 +141,19 @@ export default function MothmanDashboard() {
 
             return (
               <Card
-                key={bet.id ?? `bet-${i}`}
-                className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
-                style= {{ backgroundColor: '#454343'}}
-              >
+                  key={bet.id ?? `bet-${i}`}
+                  className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl cursor-pointer"
+                  style= {{ backgroundColor: '#454343'}}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => router.push(`/bet/${bet.id}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      router.push(`/bet/${bet.id}`);
+                    }
+                  }}
+                >
                 <CardHeader>
                   <h2 className="text-lg font-semibold text-zinc-100">
                     {bet.title}
