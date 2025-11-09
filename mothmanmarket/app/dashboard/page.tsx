@@ -142,7 +142,7 @@ export default function MothmanDashboard() {
             return (
               <Card
                   key={bet.id ?? `bet-${i}`}
-                  className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl cursor-pointer"
+                  className="bg-zinc-900 border-zinc-800 rounded-2xl cursor-pointer !shadow-[4px_4px_12px_#c00d0780]"
                   style= {{ backgroundColor: '#454343'}}
                   role="button"
                   tabIndex={0}
@@ -189,6 +189,7 @@ export default function MothmanDashboard() {
                           type="monotone"
                           dataKey="yes_price"
                           stroke="#925cff"
+                          strokeWidth={3}
                           name="Yes"
 
                           dot={false}
@@ -197,6 +198,7 @@ export default function MothmanDashboard() {
                           type="monotone"
                           dataKey="no_price"
                           stroke="#c75000"
+                          strokeWidth={3}
                           name="No"
                           dot={false}
                         />

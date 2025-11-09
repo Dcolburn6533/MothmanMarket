@@ -67,7 +67,7 @@ export default function LeaderboardPage() {
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : (
-        <Card className="bg-[#454343] border-red-800 rounded-2xl max-w-2xl mx-auto !shadow-[4px_4px_12px_#c00d0740]"
+        <Card className="bg-[#454343] border-red-800 rounded-2xl max-w-2xl mx-auto !shadow-[4px_4px_12px_#c00d0780]"
         style= {{ backgroundColor: '#454343'}}>
           <CardHeader>
             <h2 className="text-lg font-semibold text-[#c00d07] text-center">
