@@ -170,7 +170,7 @@ export default function BetPage() {
   const isResolver = !!(bet && userId && bet.resolver_id === userId);
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
+    <div className="min-h-screen bg-[#262525] p-8 text-zinc-50">
       {!bet ? (
         <div className="max-w-xl mx-auto">
           <p className="text-center text-red-400">{message ?? "Bet not found."}</p>
@@ -189,13 +189,16 @@ export default function BetPage() {
                 {/* Chart + Prices */}
                 <div className="flex-1">
                   {chartData.length > 0 && (
-                    <div className="h-64 mb-4">
+                    <div className="h-64 mb-4 group">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={chartData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                          <XAxis dataKey="time" stroke="#a1a1aa" />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#d1cfcf" />
+                          <XAxis 
+                            dataKey="time" 
+                            stroke="#d1cfcf"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                           <YAxis
-                            stroke="#a1a1aa"
+                            stroke="#d1cfcf"
                             domain={[0, 1]}
                             tickFormatter={(v) => Number(v).toFixed(3)}
                           />
@@ -223,8 +226,8 @@ export default function BetPage() {
                                 : value
                             }
                           />
-                          <Line type="monotone" dataKey="yes_price" stroke="#a10cbeff" name="Yes" dot={false} />
-                          <Line type="monotone" dataKey="no_price" stroke="#0ae9cbff" name="No" dot={false} />
+                          <Line type="monotone" dataKey="yes_price" stroke="#925cff" strokeWidth={3} name="Yes" dot={false} />
+                          <Line type="monotone" dataKey="no_price" stroke="#c75000" strokeWidth={3} name="No" dot={false} />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
@@ -232,15 +235,15 @@ export default function BetPage() {
 
                   {/* Price display */}
                   <div className="mt-2 flex gap-4 items-center">
-                    <div className="px-3 py-2 bg-zinc-900 rounded">
+                    <div className="px-3 py-2 bg-[#262525] rounded">
                       <div className="text-xs text-zinc-400">Yes</div>
-                      <div className="text-lg font-semibold text-green-400">
+                      <div className="text-lg font-semibold text-[#925cff]">
                         {Number(bet.yes_price).toFixed(3)}
                       </div>
                     </div>
-                    <div className="px-3 py-2 bg-zinc-900 rounded">
+                    <div className="px-3 py-2 bg-[#262525] rounded">
                       <div className="text-xs text-zinc-400">No</div>
-                      <div className="text-lg font-semibold text-red-400">
+                      <div className="text-lg font-semibold text-[#c75000]">
                         {Number(bet.no_price).toFixed(3)}
                       </div>
                     </div>
@@ -258,8 +261,8 @@ export default function BetPage() {
                         disabled={!bet.active || isResolver}
                         className={`px-3 py-1 rounded ${
                           action === "buy"
-                            ? "bg-green-600 text-black"
-                            : "bg-zinc-800"
+                            ? "bg-green-500 text-black"
+                            : "bg-[#262525]"
                         } ${!bet.active || isResolver ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Buy
@@ -269,8 +272,8 @@ export default function BetPage() {
                         disabled={!bet.active || isResolver}
                         className={`px-3 py-1 rounded ${
                           action === "sell"
-                            ? "bg-red-600 text-black"
-                            : "bg-zinc-800"
+                            ? "bg-red-500 text-black"
+                            : "bg-[#262525]"
                         } ${!bet.active || isResolver ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Sell
@@ -286,10 +289,9 @@ export default function BetPage() {
                         onClick={() => setSide("yes")}
                         className={`px-3 py-1 rounded ${
                           side === "yes"
-                            ? "bg-green-700 text-black"
-                            : "bg-zinc-800"
-                        }`}
-                        disabled={!bet.active || isResolver}
+                            ? "bg-[#925cff] text-black"
+                            : "bg-[#262525]"
+                        } ${!bet.active || isResolver ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         Yes
                       </button>
@@ -297,10 +299,9 @@ export default function BetPage() {
                         onClick={() => setSide("no")}
                         className={`px-3 py-1 rounded ${
                           side === "no"
-                            ? "bg-red-700 text-black"
-                            : "bg-zinc-800"
-                        }`}
-                        disabled={!bet.active || isResolver}
+                            ? "bg-[#c75000] text-black"
+                            : "bg-[#262525]"
+                        } ${!bet.active || isResolver ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         No
                       </button>
@@ -315,7 +316,7 @@ export default function BetPage() {
                       min={1}
                       value={quantity}
                       onChange={(e) => setQuantity(Number(e.target.value))}
-                      className="w-full mt-2 p-2 bg-zinc-900 rounded"
+                      className="w-full mt-2 p-2 bg-[#262525] rounded"
                       disabled={!bet.active || isResolver}
                     />
                   </div>
@@ -325,13 +326,13 @@ export default function BetPage() {
                     <button
                       onClick={handleConfirm}
                       disabled={!bet.active || isResolver}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-black rounded font-semibold hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-2 bg-[#3480eb] text-black rounded font-semibold hover:bg-[#2867bf] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Confirm
                     </button>
                     <button
                       onClick={() => router.back()}
-                      className="px-4 py-2 bg-zinc-800 rounded"
+                      className="px-4 py-2 bg-[#333131] hover:bg-[#262525] rounded"
                     >
                       Cancel
                     </button>
