@@ -6,13 +6,17 @@ import { useUser } from "@/utils/context/UserContext";
 import { usePathname } from "next/navigation";
 
 const MOTHSONA_QUOTES = [
-  "✋ absolute cinema 🤚",
-  "99% of gamblers quit before they make it big",
-  "you're one bet away from retirement!",
-  "you'll win big if you buy mothman lucky antenna cream 🧴",
+  "So you think you can predict the future?",
+  "Out of coins? Just wait an hour. You'll be able to make new predictions soon.",
+  "I've seen what comes next. Let's just say you don't need to go to work tomorrow.",
+  "Here's a good omen: I love you.",
+  "99% of gamblers quit before they make it big!",
+  "You're one bet away from retirement!",
+  "You'll win big if you buy some mothman lucky antenna cream!",
   "I sense a successful YES bet in the future...",
   "I lied you should've went NO...",
-  "Stream Golden by Huntrix!!!"
+  "Stream Golden by Huntrix!!!",
+  "✋ absolute cinema 🤚",
 ];
 
 export function MothsonaPlush() {
