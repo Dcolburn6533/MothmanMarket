@@ -6,7 +6,7 @@ import { supabase } from '@/utils/supabase/client'
 import { NextFastTable, Fields } from 'next-fast-table'
 import { useRouter } from 'next/navigation'
 
-export default function WalletHolder() {
+export default function Wallet() {
 
     const user = useUser()
     const [ data, setData ] = useState(null)
