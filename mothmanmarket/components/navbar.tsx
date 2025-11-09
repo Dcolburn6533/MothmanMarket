@@ -1,17 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { Rubik } from "next/font/google";
+import { Rubik_Glitch } from "next/font/google";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 import { useUser } from "@/utils/context/UserContext";
 
-const rubik = Rubik({ subsets: ["latin"], weight: ["400", "700"] });
+const rubik = Rubik_Glitch({ subsets: ["latin"], weight: "400" });
 
 export default function Navbar() {
   const router = useRouter();
-  const { setUserId } = useUser();
+  const { userId, setUserId, initialized } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navButton =
@@ -40,6 +40,8 @@ export default function Navbar() {
       console.error("Unexpected logout error:", err);
     }
   };
+  if (!initialized) return null;
+  if (!userId) return null;
 
   return (
     <header className="w-full sticky top-0 z-50 backdrop-blur-sm bg-[#454343]/95 text-zinc-50 border-b border-zinc-800 shadow-sm">
@@ -57,12 +59,14 @@ export default function Navbar() {
               height={48}
               className="rounded-md"
             />
-            <span className={`${rubik.className} text-lg font-semibold hidden sm:inline-block`}>Mothmanmarket</span>
+            <span className={`${rubik.className} text-3xl font-semibold hidden sm:inline-block`}>Omens of Mothman</span>
           </button>
         </div>
 
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-3">
+          <button onClick={() => router.push('/resolve_bets')} className={navButton}>Resolve Bets</button>
+          <button onClick={() => router.push('/make_bet')} className={navButton}>Create Bet</button>
           <button onClick={() => router.push('/dashboard')} className={navButton}>Dashboard</button>
           <button onClick={() => router.push('/wallet')} className={navButton}>Wallet</button>
           <button onClick={() => router.push('/leaderboard')} className={navButton}>Leaderboard</button>
@@ -98,6 +102,8 @@ export default function Navbar() {
       {menuOpen && (
         <div className="sm:hidden bg-[#454343]/95 border-t border-zinc-800">
           <div className="px-4 py-3 flex flex-col gap-2">
+            <button onClick={() => { setMenuOpen(false); router.push('/resolve_bets') }} className={navButton}>Resolve Bets</button>
+            <button onClick={() => { setMenuOpen(false); router.push('/make_bet') }} className={navButton}>Create Bet</button>
             <button onClick={() => { setMenuOpen(false); router.push('/dashboard') }} className={navButton}>Dashboard</button>
             <button onClick={() => { setMenuOpen(false); router.push('/wallet') }} className={navButton}>Wallet</button>
             <button onClick={() => { setMenuOpen(false); router.push('/leaderboard') }} className={navButton}>Leaderboard</button>

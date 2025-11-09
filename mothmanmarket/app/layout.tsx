@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
+import TransactionTicker from "@/components/transbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mothmanmarket",
-  description: "Manifested by mothman powers",
+  title: "Omens of Mothman",
+  description: "Beware the omens of the Mothman Market.",
 };
 
 export default function RootLayout({
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <Providers>
           <Navbar />
+          <TransactionTicker />
           {children}
         </Providers>
       </body>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/utils/supabase/client";
+import { useUser } from '@/utils/context/UserContext'
 import {
   LineChart,
   Line,
@@ -13,6 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 type Bet = {
   id: string;
@@ -20,6 +22,7 @@ type Bet = {
   active: boolean;
   yes_price: number;
   no_price: number;
+  comments?: string | null;
 };
 
 type PricePoint = {
@@ -33,8 +36,10 @@ type PricePoint = {
 export default function MothmanDashboard() {
   const [bets, setBets] = useState<Bet[]>([]);
   const [priceHistory, setPriceHistory] = useState<PricePoint[]>([]);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { userId } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +63,7 @@ export default function MothmanDashboard() {
         active: b.resolved === false,
         yes_price: parseFloat(b.yes_price),
         no_price: parseFloat(b.no_price),
+        comments: b.comments ?? null,
       }));
 
       const history: PricePoint[] = (historyRaw ?? []).map((h) => ({
@@ -75,16 +81,16 @@ export default function MothmanDashboard() {
 
     fetchData();
 
-    const betsChannel = supabase
+  const betsChannel = supabase
       .channel("realtime:bets")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "bets" },
         () => fetchData()
-      )
-      .subscribe();
-      const userId = localStorage.getItem('user_id');
-      console.log('User ID on cleanup from localStorage:', userId);
+  )
+  .subscribe();
+
+  console.log('User ID from context:', userId);
     const historyChannel = supabase
       .channel("realtime:price_history")
       .on(
@@ -137,14 +143,30 @@ export default function MothmanDashboard() {
 
             return (
               <Card
-                key={bet.id ?? `bet-${i}`}
-                className="bg-zinc-900 border-zinc-800 shadow-lg rounded-2xl"
-                style= {{ backgroundColor: '#454343'}}
-              >
+                  key={bet.id ?? `bet-${i}`}
+                  className="bg-zinc-900 border-zinc-800 rounded-2xl cursor-pointer !shadow-[4px_4px_12px_#c00d0780]"
+                  style= {{ backgroundColor: '#454343'}}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => router.push(`/bet/${bet.id}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      router.push(`/bet/${bet.id}`);
+                    }
+                  }}
+                >
                 <CardHeader>
-                  <h2 className="text-lg font-semibold text-zinc-100">
+                  <h2 className="text-lg font-semibold text-zinc-100 truncate">
                     {bet.title}
                   </h2>
+                  {bet.comments ? (
+                    <p className="text-sm text-zinc-400 italic mt-1">
+                      {bet.comments.length > 120
+                        ? `${bet.comments.slice(0, 120)}...`
+                        : bet.comments}
+                    </p>
+                  ) : null}
                   <p className="text-sm text-zinc-400">
                     {bet.active ? "Active" : "Resolved"}
                   </p>
@@ -165,10 +187,14 @@ export default function MothmanDashboard() {
                             backgroundColor: "#18181b",
                             borderColor: "#3f3f46",
                           }}
-                          formatter={(value, name) => [
-                            Number(value).toFixed(3),
-                            name === "yes_price" ? "Yes" : "No",
-                          ]}
+                          formatter={(value, name) => {
+                            const n = String(name ?? "");
+                            const label =
+                              n === "yes_price" || /(^|\s)yes(\s|$)/i.test(n) ?
+                                "Yes" : n === "no_price" || /(^|\s)no(\s|$)/i.test(n) ?
+                                "No" : n;
+                            return [Number(value).toFixed(3), label];
+                          }}
                           labelFormatter={(label) => `Time: ${label}`}
                         />
                         <Legend />
@@ -176,6 +202,7 @@ export default function MothmanDashboard() {
                           type="monotone"
                           dataKey="yes_price"
                           stroke="#925cff"
+                          strokeWidth={3}
                           name="Yes"
 
                           dot={false}
@@ -184,6 +211,7 @@ export default function MothmanDashboard() {
                           type="monotone"
                           dataKey="no_price"
                           stroke="#c75000"
+                          strokeWidth={3}
                           name="No"
                           dot={false}
                         />

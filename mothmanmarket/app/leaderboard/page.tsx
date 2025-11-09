@@ -54,12 +54,12 @@ export default function LeaderboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black p-8 text-zinc-50">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-red-500 tracking-wide">
+    <div className="min-h-screen bg-[#262525] p-8 text-zinc-50">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-[#c00d07] tracking-wide">
           Mothman Market Leaderboard 
       </h1>
-      <p className="text-center text-zinc-400 mb-6">
-        The cryptid watches… who among the seers will rise highest?
+      <p className="text-center text-zinc-400 italic mb-6">
+        The cryptid watches…who among the seers will rise highest?
       </p>
 
       {loading ? (
@@ -67,16 +67,17 @@ export default function LeaderboardPage() {
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : (
-        <Card className="bg-zinc-900 border-red-800 shadow-lg rounded-2xl max-w-2xl mx-auto">
+        <Card className="bg-[#454343] border-red-800 rounded-2xl max-w-2xl mx-auto !shadow-[4px_4px_12px_#c00d0780]"
+        style= {{ backgroundColor: '#454343'}}>
           <CardHeader>
-            <h2 className="text-lg font-semibold text-red-400 text-center">
+            <h2 className="text-lg font-semibold text-[#c00d07] text-center">
               Top Seers in the World
             </h2>
           </CardHeader>
           <CardContent>
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="text-zinc-400 border-b border-zinc-800">
+                <tr className="text-[#c00d07] border-b border-zinc-800">
                   <th className="py-2 px-4">Rank</th>
                   <th className="py-2 px-4">Username</th>
                   <th className="py-2 px-4 text-right">Balance</th>
@@ -95,7 +96,7 @@ export default function LeaderboardPage() {
                       key={p.username}
                       className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors"
                     >
-                      <td className="py-2 px-4 font-bold text-red-400">
+                      <td className="py-2 px-4 font-bold text-[#c00d07]">
                         {rankIcon} {index + 1}
                       </td>
                       <td className="py-2 px-4">{p.username}</td>
