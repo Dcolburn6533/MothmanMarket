@@ -187,10 +187,14 @@ export default function MothmanDashboard() {
                             backgroundColor: "#18181b",
                             borderColor: "#3f3f46",
                           }}
-                          formatter={(value, name) => [
-                            Number(value).toFixed(3),
-                            name === "yes_price" ? "Yes" : "No",
-                          ]}
+                          formatter={(value, name) => {
+                            const n = String(name ?? "");
+                            const label =
+                              n === "yes_price" || /(^|\s)yes(\s|$)/i.test(n) ?
+                                "Yes" : n === "no_price" || /(^|\s)no(\s|$)/i.test(n) ?
+                                "No" : n;
+                            return [Number(value).toFixed(3), label];
+                          }}
                           labelFormatter={(label) => `Time: ${label}`}
                         />
                         <Legend />
