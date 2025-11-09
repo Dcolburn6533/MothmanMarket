@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/utils/supabase/client";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -54,11 +53,11 @@ export default function LeaderboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#262525] p-8 text-zinc-50">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-[#c00d07] tracking-wide">
-          Mothman Market Leaderboard 
+    <div className="min-h-screen bg-[#262525] p-4 md:p-8 text-zinc-50">
+      <h1 className="text-3xl md:text-4xl font-extrabold mb-4 md:mb-8 text-center text-[#c00d07] tracking-wide">
+        Mothman Market Leaderboard
       </h1>
-      <p className="text-center text-zinc-400 italic mb-6">
+      <p className="text-center text-zinc-400 italic mb-6 text-sm md:text-base px-4">
         The cryptid watches…who among the seers will rise highest?
       </p>
 
@@ -67,20 +66,22 @@ export default function LeaderboardPage() {
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : (
-        <Card className="bg-[#454343] border-red-800 rounded-2xl max-w-2xl mx-auto !shadow-[4px_4px_12px_#c00d0780]"
-        style= {{ backgroundColor: '#454343'}}>
+        <Card
+          className="bg-[#454343] border-red-800 rounded-2xl max-w-2xl mx-auto !shadow-[4px_4px_12px_#c00d0780]"
+          style={{ backgroundColor: "#454343" }}
+        >
           <CardHeader>
-            <h2 className="text-lg font-semibold text-[#c00d07] text-center">
+            <h2 className="text-base md:text-lg font-semibold text-[#c00d07] text-center">
               Top Seers in the World
             </h2>
           </CardHeader>
-          <CardContent>
-            <table className="w-full text-left border-collapse">
+          <CardContent className="overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[400px]">
               <thead>
                 <tr className="text-[#c00d07] border-b border-zinc-800">
-                  <th className="py-2 px-4">Rank</th>
-                  <th className="py-2 px-4">Username</th>
-                  <th className="py-2 px-4 text-right">Balance</th>
+                  <th className="py-2 px-2 md:px-4 text-sm md:text-base">Rank</th>
+                  <th className="py-2 px-2 md:px-4 text-sm md:text-base">Username</th>
+                  <th className="py-2 px-2 md:px-4 text-right text-sm md:text-base">Balance</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,11 +97,11 @@ export default function LeaderboardPage() {
                       key={p.username}
                       className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors"
                     >
-                      <td className="py-2 px-4 font-bold text-[#c00d07]">
+                      <td className="py-2 px-2 md:px-4 font-bold text-[#c00d07] text-sm md:text-base">
                         {rankIcon} {index + 1}
                       </td>
-                      <td className="py-2 px-4">{p.username}</td>
-                      <td className="py-2 px-4 text-right text-green-400">
+                      <td className="py-2 px-2 md:px-4 text-sm md:text-base break-all">{p.username}</td>
+                      <td className="py-2 px-2 md:px-4 text-right text-green-400 text-sm md:text-base">
                         {p.balance.toFixed(2)}
                       </td>
                     </tr>
