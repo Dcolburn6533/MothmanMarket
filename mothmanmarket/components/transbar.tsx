@@ -145,7 +145,7 @@ export default function TransactionTicker() {
   const animationDuration = sortedTransactions.length * SECONDS_PER_TRANSACTION;
 
   return (
-    <div className="w-full bg-[#454343] border-b border-zinc-800 overflow-hidden relative">
+    <div className="w-full bg-[#454343] border-b border-zinc-800 overflow-hidden relative shadow-[0_4px_12px_#c00d0780]">
       <div className={`ticker-wrapper py-3 ${tickerFont.className}`}>
         <div 
           key={animationKey}
